@@ -1,0 +1,7 @@
+Static Remnant
+Play Cast sound plays on Storm Spirit upon cast.
+Play Target sound plays whenever a Static Remnant explodes, be it by getting triggered or by expiring (70% vol).
+Electric Vortex
+Play Cast sound plays on Storm Spirit upon cast.
+Play Target sound plays on the target upon cast.
+Play Full sound example.
