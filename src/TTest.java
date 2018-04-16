@@ -1,19 +1,23 @@
-import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import static org.junit.Assert.assertTrue;
+import static sun.swing.MenuItemLayoutHelper.max;
 
 public class TTest {
 
     @Test
     public void tail() {
-        ArrayList<String> list = new ArrayList<String>();
-        list.add("tail -c 5 -o out.txt ES.txt Storm.txt");
-        list.add("tail -n 2 -o out.txt ES.txt Storm.txt");
-        list.add("tail -o out.txt ES.txt Storm.txt");
-        list.add("tail -n 2 ES.txt Storm.txt");
-        ArrayList<String> results = new ArrayList<String>();
+        ArrayList<String[]> list = new ArrayList<>();
+        list.add("tail -c 5 -o out.txt ES.txt Storm.txt".split(" "));
+        list.add("tail -n 2 -o out.txt ES.txt Storm.txt".split(" "));
+        list.add("tail -o out.txt ES.txt Storm.txt".split(" "));
+        list.add("tail -n 2 ES.txt Storm.txt".split(" "));
+        ArrayList<String> results = new ArrayList<>();
         results.add(" 4 1.\n" +
                 "mple."
         );
@@ -42,13 +46,31 @@ public class TTest {
                 "Play Target sound plays on the target upon cast.\n" +
                 "Play Full sound example."
         );
-        for (int i = 0; i < list.size(); i++) {
+        for (int i = 0; i < list.size() - 1; i++) {
+            boolean t = true;
             try {
-                Assert.assertEquals(results.get(i), new Tail(list.get(i)).toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                Tail tail = new Tail(list.get(i));
+                CommandCheck cmd = new CommandCheck(list.get(i));
+                ArrayList ListTest = new ArrayList<>();
+                if (cmd.booo) {
+                    BufferedReader out = new BufferedReader(new FileReader(cmd.FileOut));
+                    String line;
+                    while ((line = out.readLine()) != null) {
+                        ListTest.add(line);
+                    }
+                } else ListTest = new Tail(list.get(i)).GetListf();
+                String[] a = results.get(i).split("\n");
+                for (int j = 0; j < max(ListTest.size(), a.length); j++) {
+                    if (!ListTest.get(j).equals(a[j])) {
+                        t = false;
+                        break;
+                    }
+                }
 
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+            assertTrue(t);
         }
     }
 }

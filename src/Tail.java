@@ -1,21 +1,20 @@
-
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
-
 import static java.lang.Integer.min;
 
 public class Tail {
     private ArrayList<String> ReadFile(String FileName) throws IOException {
-        ArrayList<String> lines = new ArrayList<String>();
-        BufferedReader file = new BufferedReader(new FileReader(FileName));
-        String line = "";
-        while ((line = file.readLine()) != null)
-            lines.add(line);
-        return lines;
+        ArrayList<String> LinesList = new ArrayList<>();
+        try {
+            BufferedReader file = new BufferedReader(new InputStreamReader(new FileInputStream(FileName)));
+            String line;
+            while ((line = file.readLine()) != null) {
+                LinesList.add(line);
+            }
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return LinesList;
     }
 
     private ArrayList<String> GetLines(ArrayList<String> lines, int numb) {
@@ -25,7 +24,6 @@ public class Tail {
         }
         return list;
     }
-
 
     private ArrayList<String> GetChar(ArrayList<String> lines, int numb) {
         int count = 0;
@@ -49,45 +47,58 @@ public class Tail {
         return list2;
     }
 
-    private void PrintOut(String name, ArrayList<String> list) throws IOException {
-        PrintWriter fileout = new PrintWriter(name);
-        for (int i = 0; i < list.size(); i++) {
-            fileout.println(list.get(i));
+    private void PrintOut(String FileName, ArrayList<String> list) throws IOException {
+        try {
+            BufferedWriter fileout = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(FileName)));
+            for (String aList : list) {
+                fileout.write(aList + "\n");
+            }
+            fileout.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
-        fileout.close();
     }
 
-    public ArrayList<String> listf = new ArrayList<String>();
+    public ArrayList<String> listf = new ArrayList<>();
 
-    public Tail(String command) throws IOException {
-        String folder = "C:\\Users\\Pikachu\\IdeaProjects\\Tail\\src\\";
-        CommandCheck cm = new CommandCheck(command);
+    public Tail(String[] args) throws IOException {
+        CommandCheck cm = new CommandCheck(args);
         for (int i = 0; i < cm.FileIn.size(); i++) {
             if (cm.booc) {
-
-                listf.addAll(GetChar(ReadFile(folder + cm.FileIn.get(i)), cm.numbc));
+                listf.addAll(GetChar(ReadFile(cm.FileIn.get(i)), cm.numbc));
             }
             if (cm.boon) {
-                listf.addAll(GetLines(ReadFile(folder + cm.FileIn.get(i)), cm.numbn));
+                listf.addAll(GetLines(ReadFile(cm.FileIn.get(i)), cm.numbn));
             }
         }
         if (cm.booo) {
-            PrintOut(folder + cm.FileOut, listf);
+            PrintOut(cm.FileOut, listf);
         } else {
-            for (int i = 0; i < listf.size(); i++)
-                System.out.println(listf.get(i));
+            for (String aListf : listf) System.out.println(aListf);
         }
+    }
+    public ArrayList<String> GetListf() {
+        return listf;
     }
 
     @Override
     public String toString() {
         String string = "";
-
         for (int i = 0; i < listf.size() - 1; i++) {
             string += listf.get(i) + "\n";
         }
         return string + listf.get(listf.size() - 1);
     }
+
+    public static void main(String[] args) {
+        try {
+            Tail tail = new Tail(args);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+
 }
 
 
