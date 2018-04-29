@@ -1,22 +1,20 @@
 import org.junit.Test;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import static java.lang.Math.max;
 import static org.junit.Assert.assertTrue;
-import static sun.swing.MenuItemLayoutHelper.max;
 
 public class TTest {
 
     @Test
     public void tail() {
         ArrayList<String[]> list = new ArrayList<>();
-        list.add("tail -c 5 -o out.txt ES.txt Storm.txt".split(" "));
-        list.add("tail -n 2 -o out.txt ES.txt Storm.txt".split(" "));
-        list.add("tail -o out.txt ES.txt Storm.txt".split(" "));
-        list.add("tail -n 2 ES.txt Storm.txt".split(" "));
+        list.add("-c 5 -o out.txt ES.txt Storm.txt".split(" "));
+        list.add("-n 2 -o out.txt ES.txt Storm.txt".split(" "));
+        list.add("-o out.txt ES.txt Storm.txt".split(" "));
+        list.add("-n 2 ES.txt Storm.txt".split(" "));
         ArrayList<String> results = new ArrayList<>();
         results.add(" 4 1.\n" +
                 "mple."
@@ -52,8 +50,8 @@ public class TTest {
                 Tail tail = new Tail(list.get(i));
                 CommandCheck cmd = new CommandCheck(list.get(i));
                 ArrayList ListTest = new ArrayList<>();
-                if (cmd.booo) {
-                    BufferedReader out = new BufferedReader(new FileReader(cmd.FileOut));
+                if (cmd.isBooleanO()) {
+                    BufferedReader out = new BufferedReader(new FileReader(cmd.getFileOut()));
                     String line;
                     while ((line = out.readLine()) != null) {
                         ListTest.add(line);
@@ -66,7 +64,6 @@ public class TTest {
                         break;
                     }
                 }
-
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }

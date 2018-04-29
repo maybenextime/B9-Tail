@@ -1,53 +1,82 @@
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
+
 import static java.lang.Integer.max;
 
 
-public class CommandCheck {
-    public String FileOut = "";
-    public ArrayList<String> FileIn = new ArrayList<>();
-    public int numbc = -1;
-    public int numbn = -1;
-    public boolean booc = false;
-    public boolean boon = false;
-    public boolean booo = false;
-    public CommandCheck(String[] args) throws IOException {
-        if (!Objects.equals(args[0], "tail")) throw new IOException();
-        int indexn = 0;
-        int indexc = 0;
-        int indexo = 0;
-        for (int i = 1; i < args.length; i++) {
+class CommandCheck {
+    private String FileOut = "";
+    private ArrayList<String> FileIn = new ArrayList<>();
+    private int numbC = -1;
+    private int numbN = -1;
+    private boolean booleanC = false;
+    private boolean booleanN = false;
+    private boolean booleanO = false;
+
+    String getFileOut() {
+        return FileOut;
+    }
+
+    ArrayList<String> getFileIn() {
+        return FileIn;
+    }
+
+    int getNumbC() {
+        return numbC;
+    }
+
+    int getNumbN() {
+        return numbN;
+    }
+
+    boolean isBooleanC() {
+        return booleanC;
+    }
+
+    boolean isBooleanN() {
+        return booleanN;
+    }
+
+    boolean isBooleanO() {
+        return booleanO;
+    }
+
+    CommandCheck(String[] args) {
+        if (args == null || args.length < 1) {
+            return;
+        }
+        int indexN = 0;
+        int indexC = 0;
+        int indexO = 0;
+        for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "-c": {
-                    indexc = i;
-                    numbc = Integer.parseInt(args[i + 1]);
-                    booc = true;
+                    indexC = i;
+                    numbC = Integer.parseInt(args[i + 1]);
+                    booleanC = true;
                     break;
                 }
                 case "-n": {
-                    indexn = i;
-                    numbn = Integer.parseInt(args[i + 1]);
-                    boon = true;
+                    indexN = i;
+                    numbN = Integer.parseInt(args[i + 1]);
+                    booleanN = true;
                     break;
                 }
                 case "-o": {
-                    booo = true;
-                    indexo = i;
+                    booleanO = true;
+                    indexO = i;
                     FileOut = args[i + 1];
                     break;
                 }
             }
         }
-        FileIn.addAll(Arrays.asList(args).subList(max(max(indexc, indexn), indexo) + 2, args.length));
-        if (booc && boon) throw new IOException();
-        if (!booc && !boon) {
-            boon = true;
-            numbn = 10;
+        FileIn.addAll(Arrays.asList(args).subList(max(max(indexC, indexN), indexO) + 2, args.length));
+        if (booleanC && booleanN) throw new IllegalArgumentException();
+        if (!booleanC && !booleanN) {
+            booleanN = true;
+            numbN = 10;
         }
     }
-
 }
 
 
