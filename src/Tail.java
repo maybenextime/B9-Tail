@@ -1,10 +1,11 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import static java.lang.Integer.min;
 
 public class Tail {
-    private ArrayList<String> GetLines(String FileName, int number) {
+    /*private ArrayList<String> getLines(String FileName, int number) {
         ArrayList<String> list = new ArrayList<>();
         try {
             BufferedReader file = new BufferedReader(new InputStreamReader(new FileInputStream(FileName)));
@@ -17,9 +18,9 @@ public class Tail {
             System.out.println(ex.getMessage());
         }
         return list;
-    }
+    }*/
 
-    private ArrayList<String> GetLines(ArrayList<String> lines, int number) {
+    private ArrayList<String> getLines(ArrayList<String> lines, int number) {
         ArrayList<String> list = new ArrayList<>();
         for (int i = min(number, lines.size()); i > 0; i--) {
             list.add(lines.get(lines.size() - i));
@@ -27,7 +28,7 @@ public class Tail {
         return list;
     }
 
-    private ArrayList<String> GetChar(String FileName, int number) {
+    /*private ArrayList<String> getChar(String FileName, int number) {
         ArrayList<String> list = new ArrayList<>();
         int count1 ;
         int count2 = 0;
@@ -52,9 +53,9 @@ public class Tail {
             System.out.println(ex.getMessage());
         }
         return list;
-    }
+    }*/
 
-    private ArrayList<String> GetChar(ArrayList<String> lines, int numb) {
+    private ArrayList<String> getChar(ArrayList<String> lines, int numb) {
         int count = 0;
         int NumbCharFile = 0;
         ArrayList<String> list = new ArrayList<>();
@@ -74,7 +75,7 @@ public class Tail {
         return list2;
     }
 
-    private void PrintOut(String FileName, ArrayList<String> list) throws IOException {
+    private void printOut(String FileName, ArrayList<String> list) throws IOException {
         try {
             BufferedWriter fileout = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(FileName)));
             for (String aList : list) {
@@ -89,42 +90,50 @@ public class Tail {
     private ArrayList<String> listf = new ArrayList<>();
 
     Tail(String[] args) throws IOException {
-        CommandCheck Command = new CommandCheck(args);
-        Console c = System.console();
-
         if (args == null || args.length < 1) {
             return;
         }
-        if (Command.getFileIn().isEmpty()) {
-            ArrayList<String> list = new ArrayList<>();
+        CommandCheck command = new CommandCheck(args);
+        Console c = System.console();
+        ArrayList<ArrayList<String>> lineList = new ArrayList<>();
+        if (command.getFileIn().isEmpty()) {
+            Scanner scanner = new Scanner(System.in);
             String line;
-            do {
-                line = c.readLine();
-                list.add(line);
-            } while (!line.equals("exit"));
-            if (Command.isBooleanC()) {
-                listf.addAll(GetChar(list, Command.getNumbC()));
+            while (scanner.hasNextLine() && !(line = scanner.nextLine()).equals("")) {
+                lineList.get(0).add(line);
             }
-            if (Command.isBooleanN()) {
-                listf.addAll(GetLines(list, Command.getNumbN()));
-            }
-        } else
-            for (int i = 0; i < Command.getFileIn().size(); i++) {
-                if (Command.isBooleanC()) {
-                    listf.addAll(GetChar(Command.getFileIn().get(i), Command.getNumbC()));
-                }
-                if (Command.isBooleanN()) {
-                    listf.addAll(GetLines(Command.getFileIn().get(i), Command.getNumbN()));
-                }
-            }
-        if (Command.isBooleanO()) {
-            PrintOut(Command.getFileOut(), listf);
         } else {
-            for (String aListf : listf) c.printf(aListf);
+            for (String filename : command.getFileIn()) {
+                try {
+                    BufferedReader file = new BufferedReader(new FileReader(filename));
+                    ArrayList<String> text = new ArrayList<>();
+                    String line;
+                    while ((line = file.readLine()) != null) {
+                        text.add(line);
+                    }
+                    file.close();
+                    lineList.add(text);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        for (ArrayList<String> lineFile : lineList) {
+            if (command.isBooleanC()) {
+                listf.addAll(getChar(lineFile, command.getNumbC()));
+            }
+            if (command.isBooleanN()) {
+                listf.addAll(getLines(lineFile, command.getNumbN()));
+            }
+            if (command.isBooleanO()) {
+                printOut(command.getFileOut(), listf);
+            } else {
+                for (String aListf : listf) c.printf(aListf);
+            }
         }
     }
 
-    ArrayList<String> GetListf() {
+    ArrayList<String> getListf() {
         return listf;
     }
 

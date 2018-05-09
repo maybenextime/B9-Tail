@@ -56,7 +56,7 @@ public class TTest {
                     while ((line = out.readLine()) != null) {
                         ListTest.add(line);
                     }
-                } else ListTest = new Tail(list.get(i)).GetListf();
+                } else ListTest = new Tail(list.get(i)).getListf();
                 String[] a = results.get(i).split("\n");
                 for (int j = 0; j < max(ListTest.size(), a.length); j++) {
                     if (!ListTest.get(j).equals(a[j])) {

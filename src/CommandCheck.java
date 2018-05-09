@@ -5,8 +5,8 @@ import static java.lang.Integer.max;
 
 
 class CommandCheck {
-    private String FileOut = "";
-    private ArrayList<String> FileIn = new ArrayList<>();
+    private String fileOut = "";
+    private ArrayList<String> fileIn = new ArrayList<>();
     private int numbC = -1;
     private int numbN = -1;
     private boolean booleanC = false;
@@ -14,11 +14,11 @@ class CommandCheck {
     private boolean booleanO = false;
 
     String getFileOut() {
-        return FileOut;
+        return fileOut;
     }
 
     ArrayList<String> getFileIn() {
-        return FileIn;
+        return fileIn;
     }
 
     int getNumbC() {
@@ -65,12 +65,12 @@ class CommandCheck {
                 case "-o": {
                     booleanO = true;
                     indexO = i;
-                    FileOut = args[i + 1];
+                    fileOut = args[i + 1];
                     break;
                 }
             }
         }
-        FileIn.addAll(Arrays.asList(args).subList(max(max(indexC, indexN), indexO) + 2, args.length));
+        fileIn.addAll(Arrays.asList(args).subList(max(max(indexC, indexN), indexO) + 2, args.length));
         if (booleanC && booleanN) throw new IllegalArgumentException();
         if (!booleanC && !booleanN) {
             booleanN = true;
